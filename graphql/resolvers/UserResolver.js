@@ -11,7 +11,7 @@ const UserResolver = {
 
             let userExists = await User.findOne({ username });
             if (userExists) {
-                throw new Error('User already exists');
+                throw new Error('User already exists with that username');
             } else {
                 return await User.create({
                     username,
