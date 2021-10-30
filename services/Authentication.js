@@ -10,14 +10,13 @@ const Authentication = {
             });
         })
     },
-    validatePassword(input, password) {
-        let validation = bcrypt.compare(input, password, (err, result) => {
-            if (err) {
-                return err;
-            }
-            return result;
+    comparePassword(input, password) {
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(input, password, (err, res) => {
+                if (err) reject(err);
+                else resolve(res);
+            });
         });
-        return validation;
     }
 }
 

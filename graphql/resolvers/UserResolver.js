@@ -4,6 +4,18 @@ import Authentication from '../../services/Authentication.js';
 const UserResolver = {
     Query: {
         users: async () => await User.find(),
+        authenticateUser: async (_, { username, password }) => {
+            let userExists = await User.findOne({ username});
+
+            if (userExists) {
+                let isPasswordValid = await Authentication.comparePassword(password, userExists.password);
+                if (isPasswordValid) {
+                    return userExists;
+                } else {
+                    throw new Error('Invalid password');
+                }
+            }
+        }
     },
     Mutation: {
         createUser: async (_, { username, email, password, firstName, lastName }) => {
@@ -22,7 +34,7 @@ const UserResolver = {
                     createdAt: new Date().toISOString(),
                 });
             }
-        },
+        }
     }
 }
 
